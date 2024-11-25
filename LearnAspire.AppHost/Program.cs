@@ -2,7 +2,9 @@ using LearnAspire.AppHost.Extensions;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var sql = builder.AddSqlServer("sql", port: 58349)
+var passwordParameter = builder.AddParameter("password", "p5aJ0d7WgxzWu2Cc7yDR)4");
+
+var sql = builder.AddSqlServer("sql", port: 58349, password: passwordParameter)
     .WithLifetime(ContainerLifetime.Persistent);
 
 var serviceBus = builder
