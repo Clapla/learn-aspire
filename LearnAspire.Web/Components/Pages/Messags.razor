@@ -1,0 +1,43 @@
+﻿@page "/messages"
+@using System.Collections.ObjectModel
+@using Azure.Messaging.ServiceBus
+
+@rendermode InteractiveServer
+
+<PageTitle>Messages</PageTitle>
+
+@if (Messages.Any())
+{
+    <h1>Messages</h1>
+    foreach (var message in Messages)
+    {
+        <div>@message</div>
+    }
+}
+
+<button class="btn btn-primary" @onclick="AddMessageAsync">Add message</button>
+
+<button class="btn btn-primary" @onclick="ReadMessagesAsync">Read messages</button>
+
+@code {
+    ObservableCollection<string> Messages { get; } = new();
+
+    ServiceBusClient client = new($"Endpoint=sb://localhost:5672;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;");
+
+    private async Task AddMessageAsync()
+    {
+        var sender = client.CreateSender("queue.1");
+
+        await sender.SendMessageAsync(new ServiceBusMessage("Hello!"));
+    }
+
+    private async Task ReadMessagesAsync()
+    {
+        var receiver = client.CreateReceiver("queue.1");
+
+        await foreach (var message in receiver.ReceiveMessagesAsync())
+        {
+            Messages.Add(message.Body.ToString());
+        }
+    }
+}
