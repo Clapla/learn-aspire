@@ -14,7 +14,7 @@ var serviceBus = builder
     .WithEnvironment("ACCEPT_EULA", "Y")
     .WithEnvironment("SQL_SERVER", "sql")
     .WithEnvironment("MSSQL_SA_PASSWORD", "p5aJ0d7WgxzWu2Cc7yDR)4")
-    .WithBindMount("", "/ServiceBus-Emulator/ConfigFiles/Config.json")
+    .WithBindMount("Config.json", "/ServiceBus_Emulator/ConfigFiles/Config.json")
     .WaitFor(sql);
 
 var cache = builder.AddRedis("cache")
