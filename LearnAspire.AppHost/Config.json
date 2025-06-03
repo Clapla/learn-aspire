@@ -22,7 +22,7 @@
 
         "Topics": [
           {
-            "Name": "topic.1",
+            "Name": "crm-contact",
             "Properties": {
               "DefaultMessageTimeToLive": "PT1H",
               "DuplicateDetectionHistoryTimeWindow": "PT20S",
@@ -30,7 +30,7 @@
             },
             "Subscriptions": [
               {
-                "Name": "subscription.1",
+                "Name": "crm-contact.ContactUpdated",
                 "Properties": {
                   "DeadLetteringOnMessageExpiration": false,
                   "DefaultMessageTimeToLive": "PT1H",
@@ -42,26 +42,55 @@
                 },
                 "Rules": [
                   {
-                    "Name": "app-prop-filter-1",
+                    "Name": "crm-contact.ContactUpdated-filter",
                     "Properties": {
                       "FilterType": "Correlation",
                       "CorrelationFilter": {
-                        "ContentType": "application/json"
-                        // Other supported properties
-                        // "CorrelationId": "id1",
-                        // "Label": "subject1",
-                        // "MessageId": "msgid1",
-                        // "ReplyTo": "someQueue",
-                        // "ReplyToSessionId": "sessionId",
-                        // "SessionId": "session1",
-                        // "To": "xyz"
+                        "Properties": {
+                          "action": "contactupdated"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Name": "d2l-invite",
+            "Properties": {
+              "DefaultMessageTimeToLive": "PT1H",
+              "DuplicateDetectionHistoryTimeWindow": "PT20S",
+              "RequiresDuplicateDetection": false
+            },
+            "Subscriptions": [
+              {
+                "Name": "d2l-invite.UserInvited",
+                "Properties": {
+                  "DeadLetteringOnMessageExpiration": false,
+                  "DefaultMessageTimeToLive": "PT1H",
+                  "LockDuration": "PT1M",
+                  "MaxDeliveryCount": 3,
+                  "ForwardDeadLetteredMessagesTo": "",
+                  "ForwardTo": "",
+                  "RequiresSession": false
+                },
+                "Rules": [
+                  {
+                    "Name": "d2l-invite.UserInvite-filter",
+                    "Properties": {
+                      "FilterType": "Correlation",
+                      "CorrelationFilter": {
+                        "Properties": {
+                          "action": "userinvited"
+                        } 
                       }
                     }
                   }
                 ]
               },
               {
-                "Name": "subscription.2",
+                "Name": "d2l-invite.CRMProvisioned",
                 "Properties": {
                   "DeadLetteringOnMessageExpiration": false,
                   "DefaultMessageTimeToLive": "PT1H",
@@ -73,12 +102,12 @@
                 },
                 "Rules": [
                   {
-                    "Name": "user-prop-filter-1",
+                    "Name": "d2l-invite.CRMProvisioned-filter",
                     "Properties": {
                       "FilterType": "Correlation",
                       "CorrelationFilter": {
                         "Properties": {
-                          "prop1": "value1"
+                          "action": "crmprovisioned"
                         }
                       }
                     }
@@ -86,7 +115,7 @@
                 ]
               },
               {
-                "Name": "subscription.3",
+                "Name": "d2l-invite.TMSProvisioned",
                 "Properties": {
                   "DeadLetteringOnMessageExpiration": false,
                   "DefaultMessageTimeToLive": "PT1H",
@@ -95,7 +124,45 @@
                   "ForwardDeadLetteredMessagesTo": "",
                   "ForwardTo": "",
                   "RequiresSession": false
-                }
+                },
+                "Rules": [
+                  {
+                    "Name": "d2l-invite.TMSProvisioned-filter",
+                    "Properties": {
+                      "FilterType": "Correlation",
+                      "CorrelationFilter": {
+                        "Properties": {
+                          "action": "tmsprovisioned"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "Name": "d2l-invite.IDPProvisioned",
+                "Properties": {
+                  "DeadLetteringOnMessageExpiration": false,
+                  "DefaultMessageTimeToLive": "PT1H",
+                  "LockDuration": "PT1M",
+                  "MaxDeliveryCount": 3,
+                  "ForwardDeadLetteredMessagesTo": "",
+                  "ForwardTo": "",
+                  "RequiresSession": false
+                },
+                "Rules": [
+                  {
+                    "Name": "d2l-invite.IDPProvisioned-filter",
+                    "Properties": {
+                      "FilterType": "Correlation",
+                      "CorrelationFilter": {
+                        "Properties": {
+                          "action": "idpprovisioned"
+                        }
+                      }
+                    }
+                  }
+                ]
               }
             ]
           }
