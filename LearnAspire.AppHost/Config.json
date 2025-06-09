@@ -22,7 +22,7 @@
 
         "Topics": [
           {
-            "Name": "crm-contact",
+            "Name": "crm-sync",
             "Properties": {
               "DefaultMessageTimeToLive": "PT1H",
               "DuplicateDetectionHistoryTimeWindow": "PT20S",
@@ -30,7 +30,7 @@
             },
             "Subscriptions": [
               {
-                "Name": "crm-contact.ContactUpdated",
+                "Name": "crm-sync.ContactAdded",
                 "Properties": {
                   "DeadLetteringOnMessageExpiration": false,
                   "DefaultMessageTimeToLive": "PT1H",
@@ -42,12 +42,37 @@
                 },
                 "Rules": [
                   {
-                    "Name": "crm-contact.ContactUpdated-filter",
+                    "Name": "crm-sync.ContactAdded-filter",
                     "Properties": {
                       "FilterType": "Correlation",
                       "CorrelationFilter": {
                         "Properties": {
-                          "action": "contactupdated"
+                          "action": "contactadded"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "Name": "crm-sync.ContactEdited",
+                "Properties": {
+                  "DeadLetteringOnMessageExpiration": false,
+                  "DefaultMessageTimeToLive": "PT1H",
+                  "LockDuration": "PT1M",
+                  "MaxDeliveryCount": 3,
+                  "ForwardDeadLetteredMessagesTo": "",
+                  "ForwardTo": "",
+                  "RequiresSession": false
+                },
+                "Rules": [
+                  {
+                    "Name": "crm-sync.ContactEdited-filter",
+                    "Properties": {
+                      "FilterType": "Correlation",
+                      "CorrelationFilter": {
+                        "Properties": {
+                          "action": "contactedited"
                         }
                       }
                     }
